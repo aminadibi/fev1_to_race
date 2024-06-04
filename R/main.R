@@ -1,24 +1,24 @@
 #' @export
-backCalculateRace <- function(predicted_fev1, sex, age, height){
+backCalculateRace <- function(predicted_fev1, sex, age, height) {
   height <- height/100
   binary_sex <- ifelse(sex %in% c("Male","male"), 1, 2)
 
-  ethnicities <- 1:5
   race_names <- c("White", "Black", "Asian", "Asian", "Mixed/Other",
                   "White NHANES3", "Black NHANES3", "White NHANES3")
-  closest_races <- c()
 
-  for(j in 1:length(predicted_fev1)) {
-    race_diffs <- rep(0, 8)
-
-    for(i in ethnicities){
-      race_diffs[i] <- abs(predicted_fev1[j] - pred_GLI(age[j], height[j], gender=binary_sex[j], ethnicity=i, param="FEV1"))
-      race_diffs[i + 5] <- abs(predicted_fev1[j] - pred_NHANES3(age[j], height[j], gender=binary_sex[j], ethnicity=i, param="FEV1"))
-    }
-
+  find_closest_race <- function(pred_fev1, age, height, bin_sex) {
+    ethnicities <- 1:5
+    race_diffs <- sapply(ethnicities, function(eth) {
+      abs(pred_fev1 - pred_GLI(age, height, gender = bin_sex, ethnicity = eth, param = "FEV1"))
+    })
+    race_diffs <- append(race_diffs, sapply(ethnicities, function(eth) {
+      abs(pred_fev1 - pred_NHANES3(age, height, gender = bin_sex, ethnicity = eth, param = "FEV1"))
+    }))
     min_index <- which.min(race_diffs)
-    closest_races <- c(closest_races, race_names[min_index])
+    return(race_names[min_index])
   }
+
+  closest_races <- mapply(find_closest_race, predicted_fev1, age, height, binary_sex)
 
   return(closest_races)
 }
