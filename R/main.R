@@ -27,12 +27,12 @@ backCalculateRace <- function(fev1, predicted_fev1, sex, age, height){
     filter(match==TRUE) %>%
     select(names)
 
-  if (length(lookup_dict)==0) {
-    return('99')
+  if (nrow(lookup_dict)==0) {
+    return(NA)
   }
 
   if (length(lookup_dict)>1) {
     warning("multiple matches found")
   }
-  return(lookup_dict$names)
+  return(lookup_dict)
 }
