@@ -28,11 +28,11 @@ backCalculateRace <- function(fev1, predicted_fev1, sex, age, height){
     select(names)
 
   if (nrow(lookup_dict)==0) {
-    return(NA)
+    return(99)
   }
 
   if (length(lookup_dict)>1) {
     warning("multiple matches found")
   }
-  return(lookup_dict)
+  return(lookup_dict$names)
 }
