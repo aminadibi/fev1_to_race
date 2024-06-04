@@ -1,5 +1,5 @@
 #' @export
-backCalculateRace <- function(fev1, predicted_fev1, sex, age, height){
+backCalculateRace <- function(predicted_fev1, sex, age, height){
   height <- height/100
   binary_sex <- case_when(sex %in% c("Male","male") ~ 1,
                           sex %in% c("Female", "female") ~2)

@@ -6,7 +6,7 @@
 \alias{raceFromFEV1-package}
 \title{raceFromFEV1: Determines the race variable used to calculate a race-based FEV1. For research use only.}
 \description{
-What the package does (one paragraph).
+Allows to back-calculate the race of the patient from percent predicted FEV1 values when using a race-based spirometry reference equations.
 }
 \author{
 \strong{Maintainer}: Amin Adibi \email{adibi@alumni.ubc.ca} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
