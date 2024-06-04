@@ -1,7 +1,8 @@
 #' @export
 backCalculateRace <- function(fev1, percent_predicted_fev1, sex, age, height){
   height <- height/100
-
+  binary_sex <- case_when(sex %in% c("Male","male") ~ 1,
+                          sex %in% c("Female", "female") ~2)
   lookup_dict <- tibble(
     names = c("NHANES3_White",
               "NHANES3_Black",
@@ -13,15 +14,15 @@ backCalculateRace <- function(fev1, percent_predicted_fev1, sex, age, height){
               "GLI2012_Other_Mixed",
               "GLI_gl_2022"),
     value =
-      c(pctpred_NHANES3(age, height, ethnicity=1, FEV1=fev1),
-        pctpred_NHANES3(age, height, ethnicity=2, FEV1=fev1),
-        pctpred_NHANES3(age, height, ethnicity=3, FEV1=fev1),
-        pctpred_GLI(age, height, ethnicity=1, FEV1=fev1),
-        pctpred_GLI(age, height, ethnicity=2, FEV1=fev1),
-        pctpred_GLI(age, height, ethnicity=3, FEV1=fev1),
-        pctpred_GLI(age, height, ethnicity=4, FEV1=fev1),
-        pctpred_GLI(age, height, ethnicity=5, FEV1=fev1),
-        pctpred_GLIgl(age, height,  FEV1=fev1))) %>%
+      c(pctpred_NHANES3(age, height, gender=binary_sex, ethnicity=1, FEV1=fev1),
+        pctpred_NHANES3(age, height, gender=binary_sex, ethnicity=2, FEV1=fev1),
+        pctpred_NHANES3(age, height, gender=binary_sex, ethnicity=3, FEV1=fev1),
+        pctpred_GLI(age, height, gender=binary_sex, ethnicity=1, FEV1=fev1),
+        pctpred_GLI(age, height, gender=binary_sex, ethnicity=2, FEV1=fev1),
+        pctpred_GLI(age, height, gender=binary_sex, ethnicity=3, FEV1=fev1),
+        pctpred_GLI(age, height, gender=binary_sex, ethnicity=4, FEV1=fev1),
+        pctpred_GLI(age, height, gender=binary_sex, ethnicity=5, FEV1=fev1),
+        pctpred_GLIgl(age, height, gender=binary_sex, FEV1=fev1))) %>%
     mutate(match=(abs(percent_predicted_fev1-value)<=1e-2)) %>%
     filter(match==TRUE) %>%
     select(names)
