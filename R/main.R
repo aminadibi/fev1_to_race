@@ -1,5 +1,5 @@
 #' @export
-backCalculateRace <- function(fev1, percent_predicted_fev1, sex, age, height){
+backCalculateRace <- function(fev1, predicted_fev1, sex, age, height){
   height <- height/100
   binary_sex <- case_when(sex %in% c("Male","male") ~ 1,
                           sex %in% c("Female", "female") ~2)
@@ -23,12 +23,12 @@ backCalculateRace <- function(fev1, percent_predicted_fev1, sex, age, height){
         pred_GLI(age, height, gender=binary_sex, ethnicity=4, param="FEV1"),
         pred_GLI(age, height, gender=binary_sex, ethnicity=5, param="FEV1"),
         pred_GLIgl(age, height, gender=binary_sex, param="FEV1"))) %>%
-    mutate(match=(abs(percent_predicted_fev1-value)<=1e-2)) %>%
+    mutate(match=(abs(predicted_fev1-value)<=1e-2)) %>%
     filter(match==TRUE) %>%
     select(names)
 
   if (length(lookup_dict)==0) {
-    return(NA)
+    return('99')
   }
 
   if (length(lookup_dict)>1) {
