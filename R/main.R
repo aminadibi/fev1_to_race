@@ -1,5 +1,30 @@
 #' @export
-backCalculateRace <- function(predicted_fev1, sex, age, height, tolerance=1e-1){
+backCalculateRace <- function(predicted_fev1, sex, age, height){
+  height <- height/100
+  binary_sex <- ifelse(sex %in% c("Male","male"), 1, 2)
+
+  ethnicities <- 1:5
+  race_names <- c("White", "Black", "Asian", "Asian", "Mixed/Other",
+                  "White NHANES3", "Black NHANES3", "White NHANES3")
+  closest_races <- c()
+
+  for(j in 1:length(predicted_fev1)) {
+    race_diffs <- rep(0, 8)
+
+    for(i in ethnicities){
+      race_diffs[i] <- abs(predicted_fev1[j] - pred_GLI(age[j], height[j], gender=binary_sex[j], ethnicity=i, param="FEV1"))
+      race_diffs[i + 5] <- abs(predicted_fev1[j] - pred_NHANES3(age[j], height[j], gender=binary_sex[j], ethnicity=i, param="FEV1"))
+    }
+
+    min_index <- which.min(race_diffs)
+    closest_races <- c(closest_races, race_names[min_index])
+  }
+
+  return(closest_races)
+}
+
+#' @export
+backCalculateRace2 <- function(predicted_fev1, sex, age, height, tolerance=1e-1){
   height <- height/100
   binary_sex <- case_when(sex %in% c("Male","male") ~ 1,
                           sex %in% c("Female", "female") ~2)
@@ -20,7 +45,7 @@ backCalculateRace <- function(predicted_fev1, sex, age, height, tolerance=1e-1){
 
 
 #' @export
-backCalculateRace2 <- function(predicted_fev1, sex, age, height){
+backCalculateRace3 <- function(predicted_fev1, sex, age, height){
   height <- height/100
   binary_sex <- case_when(sex %in% c("Male","male") ~ 1,
                           sex %in% c("Female", "female") ~2)
