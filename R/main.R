@@ -14,15 +14,15 @@ backCalculateRace <- function(fev1, percent_predicted_fev1, sex, age, height){
               "GLI2012_Other_Mixed",
               "GLI_gl_2022"),
     value =
-      c(pctpred_NHANES3(age, height, gender=binary_sex, ethnicity=1, FEV1=fev1),
-        pctpred_NHANES3(age, height, gender=binary_sex, ethnicity=2, FEV1=fev1),
-        pctpred_NHANES3(age, height, gender=binary_sex, ethnicity=3, FEV1=fev1),
-        pctpred_GLI(age, height, gender=binary_sex, ethnicity=1, FEV1=fev1),
-        pctpred_GLI(age, height, gender=binary_sex, ethnicity=2, FEV1=fev1),
-        pctpred_GLI(age, height, gender=binary_sex, ethnicity=3, FEV1=fev1),
-        pctpred_GLI(age, height, gender=binary_sex, ethnicity=4, FEV1=fev1),
-        pctpred_GLI(age, height, gender=binary_sex, ethnicity=5, FEV1=fev1),
-        pctpred_GLIgl(age, height, gender=binary_sex, FEV1=fev1))) %>%
+      c(pred_NHANES3(age, height, gender=binary_sex, ethnicity=1, param="FEV1"),
+        pred_NHANES3(age, height, gender=binary_sex, ethnicity=2, param="FEV1"),
+        pred_NHANES3(age, height, gender=binary_sex, ethnicity=3, param="FEV1"),
+        pred_GLI(age, height, gender=binary_sex, ethnicity=1, param="FEV1"),
+        pred_GLI(age, height, gender=binary_sex, ethnicity=2, param="FEV1"),
+        pred_GLI(age, height, gender=binary_sex, ethnicity=3, param="FEV1"),
+        pred_GLI(age, height, gender=binary_sex, ethnicity=4, param="FEV1"),
+        pred_GLI(age, height, gender=binary_sex, ethnicity=5, param="FEV1"),
+        pred_GLIgl(age, height, gender=binary_sex, param="FEV1"))) %>%
     mutate(match=(abs(percent_predicted_fev1-value)<=1e-2)) %>%
     filter(match==TRUE) %>%
     select(names)
