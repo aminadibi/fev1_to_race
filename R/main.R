@@ -1,5 +1,5 @@
 #' @export
-backCalculateRace <- function(predicted_fev1, sex, age, height, tolerance=1e-2){
+backCalculateRace <- function(predicted_fev1, sex, age, height, tolerance=1e-1){
   height <- height/100
   binary_sex <- case_when(sex %in% c("Male","male") ~ 1,
                           sex %in% c("Female", "female") ~2)
@@ -9,6 +9,9 @@ backCalculateRace <- function(predicted_fev1, sex, age, height, tolerance=1e-2){
   (abs(predicted_fev1-pred_GLI(age, height, gender=binary_sex, ethnicity=3, param="FEV1"))<=tolerance) ~ "Asian",
   (abs(predicted_fev1-pred_GLI(age, height, gender=binary_sex, ethnicity=4, param="FEV1"))<=tolerance) ~ "Asian",
   (abs(predicted_fev1-pred_GLI(age, height, gender=binary_sex, ethnicity=5, param="FEV1"))<=tolerance) ~ "Mixed/Other",
+  (abs(predicted_fev1-pred_NHANES3(age, height, gender=binary_sex, ethnicity=1, param="FEV1"))<=tolerance) ~ "White",
+  (abs(predicted_fev1-pred_NHANES3(age, height, gender=binary_sex, ethnicity=2, param="FEV1"))<=tolerance) ~ "Black",
+  (abs(predicted_fev1-pred_NHANES3(age, height, gender=binary_sex, ethnicity=3, param="FEV1"))<=tolerance) ~ "White",
   .default = NA)
 
   return(res)
