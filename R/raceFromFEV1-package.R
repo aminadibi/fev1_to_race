@@ -2,6 +2,7 @@
 "_PACKAGE"
 
 ## usethis namespace: start
+#' @import dplyr
 #' @importFrom rspiro pctpred_GLI
 #' @importFrom rspiro pctpred_GLIgl
 #' @importFrom rspiro pctpred_NHANES3
