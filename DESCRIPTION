@@ -1,6 +1,6 @@
 Package: raceFromFEV1
 Title: Determines the race variable used to calculate a race-based FEV1. For research use only.
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: 
     person("Amin", "Adibi", , "adibi@alumni.ubc.ca", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
