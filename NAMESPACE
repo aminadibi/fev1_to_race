@@ -3,6 +3,7 @@
 export(backCalculateRace)
 export(backCalculateRace2)
 export(backCalculateRace3)
+export(backCalculateRace4)
 import(dplyr)
 importFrom(rspiro,pctpred_GLI)
 importFrom(rspiro,pctpred_GLIgl)

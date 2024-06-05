@@ -1,5 +1,25 @@
 #' @export
-backCalculateRace <- function(predicted_fev1, sex, age, height) {
+backCalculateRace <- function(df) {
+
+  df <- df %>%
+    mutate(height = height/100,
+           binary_sex = ifelse(sex_at_birth %in% c("Male","male"), 1, 2),
+           dif_White = abs(fev1_predicted-pred_GLI(age_pft, height, gender = binary_sex, ethnicity = 1, param = "FEV1")),
+           dif_Black = abs(fev1_predicted-pred_GLI(age_pft, height, gender = binary_sex, ethnicity = 2, param = "FEV1")),
+           dif_NEAsian = abs(fev1_predicted-pred_GLI(age_pft, height, gender = binary_sex, ethnicity = 3, param = "FEV1")),
+           dif_SEAsian = abs(fev1_predicted-pred_GLI(age_pft, height, gender = binary_sex, ethnicity = 4, param = "FEV1")),
+           dif_Other = abs(fev1_predicted-pred_GLI(age_pft, height, gender = binary_sex, ethnicity = 5, param = "FEV1"))) %>%
+    rowwise %>%
+    mutate(MIN_COL = names(.)[(dim(df)[2]+2):(dim(df)[2]+6)][which.min(c_across(c(dif_White, dif_Black, dif_NEAsian, dif_SEAsian, dif_Other)))]) %>%
+    ungroup
+
+  return(df)
+
+}
+
+
+#' @export
+backCalculateRace2 <- function(predicted_fev1, sex, age, height) {
   height <- height/100
   binary_sex <- ifelse(sex %in% c("Male","male"), 1, 2)
 
@@ -24,7 +44,7 @@ backCalculateRace <- function(predicted_fev1, sex, age, height) {
 }
 
 #' @export
-backCalculateRace2 <- function(predicted_fev1, sex, age, height, tolerance=1e-1){
+backCalculateRace3 <- function(predicted_fev1, sex, age, height, tolerance=1e-1){
   height <- height/100
   binary_sex <- case_when(sex %in% c("Male","male") ~ 1,
                           sex %in% c("Female", "female") ~2)
@@ -45,7 +65,7 @@ backCalculateRace2 <- function(predicted_fev1, sex, age, height, tolerance=1e-1)
 
 
 #' @export
-backCalculateRace3 <- function(predicted_fev1, sex, age, height){
+backCalculateRace4 <- function(predicted_fev1, sex, age, height){
   height <- height/100
   binary_sex <- case_when(sex %in% c("Male","male") ~ 1,
                           sex %in% c("Female", "female") ~2)
